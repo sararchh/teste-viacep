@@ -8,16 +8,34 @@ import { useGetCep } from "@/repository/useGetCep";
 import { formatCep } from "@/utils/format-cep";
 
 import toast from "react-hot-toast";
+import { useCep } from "@/contexts/CepContext";
+import { ICep } from "@/types/cep";
 
 const QueryCEP: React.FC = () => {
   const [cep, setCep] = React.useState("");
   const [isFetchEnabled, setIsFetchEnabled] = React.useState(false);
+  const [localData, setLocalData] = React.useState<ICep | null>(null);
 
-  const { data, isLoading, isError } = useGetCep(cep, isFetchEnabled);
+  const { data, isLoading } = useGetCep(cep, isFetchEnabled);
+  const { getCepLocalStorage, setCepLocalStorage } = useCep();
+
+  React.useEffect(() => {
+    if (data) {
+      setCepLocalStorage(data.cep, data);
+      setLocalData(data);
+    }
+
+    setIsFetchEnabled(false);
+  }, [data, isFetchEnabled]);
 
   const handleGetCep = () => {
     if (cep.replace(/\D/g, "").length === 8) {
-      setIsFetchEnabled(true);
+      const storedData = getCepLocalStorage(cep);
+      if (storedData) {
+        setLocalData(storedData);
+      } else {
+        setIsFetchEnabled(true);
+      }
     } else {
       toast.error("CEP inválido, verifique!");
       setIsFetchEnabled(false);
@@ -25,6 +43,7 @@ const QueryCEP: React.FC = () => {
   };
 
   const handleChangeCep = (value: string) => {
+    setLocalData(null);
     setCep(formatCep(value));
   };
 
@@ -63,23 +82,23 @@ const QueryCEP: React.FC = () => {
 
         <section className="mt-4">
           {isLoading && <p>Carregando...</p>}
-          {isError && <p>Erro ao buscar CEP</p>}
-          {data && (
-             <div className="flex flex-wrap gap-4">
-             {renderData("Logradouro", data.logradouro)}
-             {renderData("Bairro", data.bairro)}
-             {renderData("Localidade", data.localidade)}
-             {renderData("UF", data.uf)}
-             {renderData("CEP", data.cep)}
-             {renderData("Complemento", data.complemento)}
-             {renderData("DDD", data.ddd)}
-             {renderData("Estado", data.estado)}
-             {renderData("GIA", data.gia)}
-             {renderData("IBGE", data.ibge)}
-             {renderData("Região", data.regiao)}
-             {renderData("SIAFI", data.siafi)}
-             {renderData("Unidade", data.unidade)}
-           </div>
+          {localData?.erro && <p>Erro ao buscar CEP, verifique!</p>}
+          {localData && !localData.erro && (
+            <div className="flex flex-wrap gap-4">
+              {renderData("Logradouro", localData.logradouro)}
+              {renderData("Bairro", localData.bairro)}
+              {renderData("Localidade", localData.localidade)}
+              {renderData("UF", localData.uf)}
+              {renderData("CEP", localData.cep)}
+              {renderData("Complemento", localData.complemento)}
+              {renderData("DDD", localData.ddd)}
+              {renderData("Estado", localData.estado)}
+              {renderData("GIA", localData.gia)}
+              {renderData("IBGE", localData.ibge)}
+              {renderData("Região", localData.regiao)}
+              {renderData("SIAFI", localData.siafi)}
+              {renderData("Unidade", localData.unidade)}
+            </div>
           )}
         </section>
       </div>

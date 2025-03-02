@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { queryClient } from "@/config/query-client.config";
 import { Toaster } from "react-hot-toast";
+import { CepProvider } from "@/contexts/CepContext";
 
 const ClientRootProvider: React.FC<React.PropsWithChildren> = ({
   children,
@@ -18,11 +19,13 @@ const ClientRootProvider: React.FC<React.PropsWithChildren> = ({
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Toaster />
-      {children}
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    <CepProvider>
+      <QueryClientProvider client={queryClient}>
+        <Toaster />
+        {children}
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </CepProvider>
   );
 };
 

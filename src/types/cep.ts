@@ -12,4 +12,5 @@ export interface ICep {
   siafi:  string;
   uf:  string;
   unidade: string;
+  erro?: boolean;
 }

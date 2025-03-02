@@ -16,7 +16,7 @@ const getCep = async (payload: { cep: string }): Promise<ICep> => {
 
 export const useGetCep = (cep: string, isEnable: boolean) =>
   useQuery({
-    queryKey: ["cep-list", cep],
+    queryKey: ["cep", cep],
     queryFn: () => getCep({ cep }),
     enabled: isEnable,
     retry: false,
