@@ -37,3 +37,15 @@ yarn start
 ```
 
 Abra [http://localhost:3000](http://localhost:3000) no seu navegador para ver o resultado.
+
+### Como rodar com Docker
+
+Para rodar a aplicação utilizando Docker, siga os seguintes passos:
+
+1. Construa e inicie os contêineres:
+    ```sh
+    docker compose up --build
+    ```
+
+2. Acesse a aplicação no navegador:
+    - Frontend: [http://localhost:3000](http://localhost:3000)

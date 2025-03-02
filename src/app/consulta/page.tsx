@@ -111,7 +111,7 @@ const QueryCEP: React.FC = () => {
         </section>
 
         <IfRender condition={localData}>
-          <section className="mt-10 shadow-md p-6 rounded-lg bg-[var(--color-white)]">
+          <section className="mt-10 shadow-md p-6 rounded-lg bg-[var(--color-white)] flex items-center flex-col">
             {localData?.erro && <p>Erro ao buscar CEP, verifique!</p>}
             {isLoading && <Spinner classSize={"w-[20px] h-[20px]"} />}
             {localData && !localData.erro && (
