@@ -1,7 +1,7 @@
 import axios from "axios";
 import { apiConfig } from "@/config/api.config";
 
-export function setupApiClient(ctx = undefined) {
+export function setupApiClient() {
   const api = axios.create({
     baseURL: apiConfig.baseUrl,
     headers: {

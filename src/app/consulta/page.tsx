@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { ButtonComponent } from "@/components/atoms/Button/Button";
@@ -143,4 +143,10 @@ const QueryCEP: React.FC = () => {
   );
 };
 
-export default QueryCEP;
+const QueryCEPSuspenseWrapper: React.FC = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <QueryCEP />
+  </Suspense>
+);
+
+export default QueryCEPSuspenseWrapper;
