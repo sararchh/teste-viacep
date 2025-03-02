@@ -7,10 +7,13 @@ import { HeaderComponent } from "@/components/molecules/Header/Header";
 import { useGetCep } from "@/repository/useGetCep";
 import { formatCep } from "@/utils/format-cep";
 
-import toast from "react-hot-toast";
 import { useCep } from "@/contexts/CepContext";
 import { ICep } from "@/types/cep";
 import { IfRender } from "@/utils/jsx";
+
+import toast from "react-hot-toast";
+import { FaArrowLeft } from "react-icons/fa";
+import Link from "next/link";
 
 const QueryCEP: React.FC = () => {
   const [cep, setCep] = React.useState("");
@@ -66,7 +69,12 @@ const QueryCEP: React.FC = () => {
 
       <div className="container mx-auto p-4">
         <section>
-          <h2 className="font-semibold">Consulta de CEP</h2>
+          <span className="flex items-center gap-3">
+            <Link href="/">
+              <FaArrowLeft />
+            </Link>
+            <h2 className="font-semibold">Consulta de CEP</h2>
+          </span>
           <p className="text-1xl opacity-55">Informe o CEP para consulta:</p>
           <br />
           <div className="flex flex-col lg:flex-row lg:items-baseline lg:space-x-4">
