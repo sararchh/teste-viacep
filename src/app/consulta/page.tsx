@@ -15,6 +15,7 @@ import { IfRender } from "@/utils/jsx";
 import toast from "react-hot-toast";
 import { FaArrowLeft } from "react-icons/fa";
 import Link from "next/link";
+import { Spinner } from "@/components/atoms/Spinner/Spinner";
 
 const QueryCEP: React.FC = () => {
   const router = useRouter();
@@ -102,10 +103,34 @@ const QueryCEP: React.FC = () => {
             />
             <ButtonComponent
               onClick={() => handleGetCep()}
-              className="mt-4 lg:mt-0 min-w-2xs lg:w-14 sm:w-full rounded-2xl h-10 bg-[var(--color-orange-10)] font-bold cursor-pointer"
+              className="lg:mt-0 min-w-2xs lg:w-14 sm:w-full rounded-2xl h-10 bg-[var(--color-orange-10)] font-bold cursor-pointer"
             >
               Consultar
             </ButtonComponent>
+          </div>
+        </section>
+
+        <IfRender condition={localData}>
+          <section className="mt-10 shadow-md p-6 rounded-lg bg-[var(--color-white)]">
+            {localData?.erro && <p>Erro ao buscar CEP, verifique!</p>}
+            {isLoading && <Spinner classSize={"w-[20px] h-[20px]"} />}
+            {localData && !localData.erro && (
+              <div className="flex flex-wrap gap-4">
+                {renderData("Logradouro", localData.logradouro)}
+                {renderData("Bairro", localData.bairro)}
+                {renderData("Localidade", localData.localidade)}
+                {renderData("UF", localData.uf)}
+                {renderData("CEP", localData.cep)}
+                {renderData("Complemento", localData.complemento)}
+                {renderData("DDD", localData.ddd)}
+                {renderData("Estado", localData.estado)}
+                {renderData("GIA", localData.gia)}
+                {renderData("IBGE", localData.ibge)}
+                {renderData("Região", localData.regiao)}
+                {renderData("SIAFI", localData.siafi)}
+                {renderData("Unidade", localData.unidade)}
+              </div>
+            )}
             <IfRender condition={localData?.cep}>
               <ButtonComponent
                 onClick={handleSaveCep}
@@ -114,37 +139,21 @@ const QueryCEP: React.FC = () => {
                 Salvar CEP
               </ButtonComponent>
             </IfRender>
-          </div>
-        </section>
-
-        <section className="mt-4">
-          {isLoading && <p>Carregando...</p>}
-          {localData?.erro && <p>Erro ao buscar CEP, verifique!</p>}
-          {localData && !localData.erro && (
-            <div className="flex flex-wrap gap-4">
-              {renderData("Logradouro", localData.logradouro)}
-              {renderData("Bairro", localData.bairro)}
-              {renderData("Localidade", localData.localidade)}
-              {renderData("UF", localData.uf)}
-              {renderData("CEP", localData.cep)}
-              {renderData("Complemento", localData.complemento)}
-              {renderData("DDD", localData.ddd)}
-              {renderData("Estado", localData.estado)}
-              {renderData("GIA", localData.gia)}
-              {renderData("IBGE", localData.ibge)}
-              {renderData("Região", localData.regiao)}
-              {renderData("SIAFI", localData.siafi)}
-              {renderData("Unidade", localData.unidade)}
-            </div>
-          )}
-        </section>
+          </section>
+        </IfRender>
       </div>
     </>
   );
 };
 
 const QueryCEPSuspenseWrapper: React.FC = () => (
-  <Suspense fallback={<div>Loading...</div>}>
+  <Suspense
+    fallback={
+      <div>
+        <Spinner classSize={"w-[20px] h-[20px]"} />
+      </div>
+    }
+  >
     <QueryCEP />
   </Suspense>
 );
