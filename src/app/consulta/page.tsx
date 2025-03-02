@@ -10,6 +10,7 @@ import { formatCep } from "@/utils/format-cep";
 import toast from "react-hot-toast";
 import { useCep } from "@/contexts/CepContext";
 import { ICep } from "@/types/cep";
+import { IfRender } from "@/utils/jsx";
 
 const QueryCEP: React.FC = () => {
   const [cep, setCep] = React.useState("");
@@ -21,7 +22,6 @@ const QueryCEP: React.FC = () => {
 
   React.useEffect(() => {
     if (data) {
-      setCepLocalStorage(data.cep, data);
       setLocalData(data);
     }
 
@@ -45,6 +45,13 @@ const QueryCEP: React.FC = () => {
   const handleChangeCep = (value: string) => {
     setLocalData(null);
     setCep(formatCep(value));
+  };
+
+  const handleSaveCep = () => {
+    if (localData) {
+      setCepLocalStorage(localData.cep, localData);
+      toast.success("CEP salvo com sucesso!");
+    }
   };
 
   const renderData = (label: string, value: string) => (
@@ -77,6 +84,14 @@ const QueryCEP: React.FC = () => {
             >
               Consultar
             </ButtonComponent>
+            <IfRender condition={localData?.cep}>
+              <ButtonComponent
+                onClick={handleSaveCep}
+                className="mt-4 lg:mt-0 min-w-2xs lg:w-14 sm:w-full rounded-2xl h-10 bg-[var(--color-orange-10)] font-bold cursor-pointer"
+              >
+                Salvar CEP
+              </ButtonComponent>
+            </IfRender>
           </div>
         </section>
 
