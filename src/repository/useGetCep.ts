@@ -2,7 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { apiConfig } from "@/config/api.config";
 import { api } from "@/libs/axios/api-client.lib";
 
-const getCep = async (payload: { cep: string }) => {
+import { ICep } from "@/types/cep";
+
+const getCep = async (payload: { cep: string }): Promise<ICep> => {
   if (payload.cep) {
     payload.cep = payload.cep.replace(/\D/g, "");
   }

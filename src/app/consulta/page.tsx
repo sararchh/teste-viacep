@@ -6,6 +6,7 @@ import { InputComponent } from "@/components/atoms/Input/Input";
 import { HeaderComponent } from "@/components/molecules/header/header.component";
 import { useGetCep } from "@/repository/useGetCep";
 import { formatCep } from "@/utils/format-cep";
+
 import toast from "react-hot-toast";
 
 const QueryCEP: React.FC = () => {
@@ -26,6 +27,12 @@ const QueryCEP: React.FC = () => {
   const handleChangeCep = (value: string) => {
     setCep(formatCep(value));
   };
+
+  const renderData = (label: string, value: string) => (
+    <p className="text-1xl leading-8">
+      <strong>{label}:</strong> {value || "Não informado"}
+    </p>
+  );
 
   return (
     <>
@@ -52,6 +59,28 @@ const QueryCEP: React.FC = () => {
               Consultar
             </ButtonComponent>
           </div>
+        </section>
+
+        <section className="mt-4">
+          {isLoading && <p>Carregando...</p>}
+          {isError && <p>Erro ao buscar CEP</p>}
+          {data && (
+             <div className="flex flex-wrap gap-4">
+             {renderData("Logradouro", data.logradouro)}
+             {renderData("Bairro", data.bairro)}
+             {renderData("Localidade", data.localidade)}
+             {renderData("UF", data.uf)}
+             {renderData("CEP", data.cep)}
+             {renderData("Complemento", data.complemento)}
+             {renderData("DDD", data.ddd)}
+             {renderData("Estado", data.estado)}
+             {renderData("GIA", data.gia)}
+             {renderData("IBGE", data.ibge)}
+             {renderData("Região", data.regiao)}
+             {renderData("SIAFI", data.siafi)}
+             {renderData("Unidade", data.unidade)}
+           </div>
+          )}
         </section>
       </div>
     </>
