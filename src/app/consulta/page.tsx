@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { ButtonComponent } from "@/components/atoms/Button/Button";
 import { InputComponent } from "@/components/atoms/Input/Input";
@@ -16,12 +17,23 @@ import { FaArrowLeft } from "react-icons/fa";
 import Link from "next/link";
 
 const QueryCEP: React.FC = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [cep, setCep] = React.useState("");
   const [isFetchEnabled, setIsFetchEnabled] = React.useState(false);
   const [localData, setLocalData] = React.useState<ICep | null>(null);
 
   const { data, isLoading } = useGetCep(cep, isFetchEnabled);
   const { getCepLocalStorage, setCepLocalStorage } = useCep();
+
+  React.useEffect(() => {
+    const cepFromUrl = searchParams.get("cep");
+    if (cepFromUrl) {
+      setCep(formatCep(cepFromUrl));
+      handleGetCep(cepFromUrl);
+    }
+  }, []);
 
   React.useEffect(() => {
     if (data) {
@@ -31,14 +43,16 @@ const QueryCEP: React.FC = () => {
     setIsFetchEnabled(false);
   }, [data, isFetchEnabled]);
 
-  const handleGetCep = () => {
-    if (cep.replace(/\D/g, "").length === 8) {
-      const storedData = getCepLocalStorage(cep);
+  const handleGetCep = (cepValue?: string) => {
+    const cepToFetch = cepValue || cep;
+    if (cepToFetch.replace(/\D/g, "").length === 8) {
+      const storedData = getCepLocalStorage(cepToFetch);
       if (storedData) {
         setLocalData(storedData);
       } else {
         setIsFetchEnabled(true);
       }
+      router.push(`/consulta?cep=${cepToFetch}`);
     } else {
       toast.error("CEP inválido, verifique!");
       setIsFetchEnabled(false);
@@ -87,7 +101,7 @@ const QueryCEP: React.FC = () => {
               onChange={handleChangeCep}
             />
             <ButtonComponent
-              onClick={handleGetCep}
+              onClick={() => handleGetCep()}
               className="mt-4 lg:mt-0 min-w-2xs lg:w-14 sm:w-full rounded-2xl h-10 bg-[var(--color-orange-10)] font-bold cursor-pointer"
             >
               Consultar
