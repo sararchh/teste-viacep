@@ -3,7 +3,7 @@ import React from "react";
 
 import { ButtonComponent } from "@/components/atoms/Button/Button";
 import { InputComponent } from "@/components/atoms/Input/Input";
-import { HeaderComponent } from "@/components/molecules/header/header.component";
+import { HeaderComponent } from "@/components/molecules/Header/Header";
 import { useGetCep } from "@/repository/useGetCep";
 import { formatCep } from "@/utils/format-cep";
 
